@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Listing from './components/Listing';
 import './App.scss';
+import Spinner from './components/Spinner';
 
 const App = () => {
 
+
+  
   const[initialSearchTerm, setInitialSearchTerm] = useState({});
   const[page, setPage] = useState(0);
   const[word, setWord] = useState("thinkpad");
+  const[loading, setLoading] = useState(true);
 
 
   useEffect(()=> {
     axios.get(`/api/${word}/${page}`).then((response) => {
       setInitialSearchTerm(response.data);
       console.log(initialSearchTerm);
+      setLoading(false);
+     
     })
   }, [initialSearchTerm])
 
@@ -41,7 +47,9 @@ const App = () => {
 
     }
     console.log(pages);
-
+    if(pages.length < 2) {
+      return null
+    } else {
     return pages.map((page) => {
       return (
         <span onClick={() => changePage(page)} className="pagination-item">
@@ -49,10 +57,12 @@ const App = () => {
         </span>
       )
     })
+  }
 
   }
 
   const onClick = (e) =>{
+    setLoading(true);
     let term = e.target.innerText;
     if(term === "All Thinkpads") {
       setWord("thinkpad");
@@ -75,8 +85,10 @@ const App = () => {
        <span onClick={e => onClick(e)}>All Thinkpads</span>
      </div>
      
-      <div className="card-map"> 
-      {displayArticles()}
+      <div style={loading ? {minHeight: "500px", alignItems: "center"} : null} className="card-map"> 
+    
+      {loading ? <Spinner/> : displayArticles()}
+      
       </div>
       <div className="pagination-parent"> {pagination()}</div>
     </div>
