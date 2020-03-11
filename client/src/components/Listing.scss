@@ -1,0 +1,40 @@
+
+
+.card-container {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 20px;
+    align-items: center;
+    border-radius: 15px;
+
+    -webkit-box-shadow: 6px 6px 27px -13px rgba(0,0,0,0.66);
+    -moz-box-shadow: 6px 6px 27px -13px rgba(0,0,0,0.66);
+    box-shadow: 6px 6px 27px -13px rgba(0,0,0,0.66);
+
+    h1{
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    h3 {
+        background-color: rebeccapurple;
+        display: block;
+        padding: 5px 20px;
+        color: white;
+        border-radius: 20px;
+        margin: -100px 20px 50px;
+        z-index: 1;
+        align-self: flex-start;
+    }
+
+    .image {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+        margin: -20px 0 20px;
+        padding: 20px 0;
+       border-radius: 15px;
+    }
+}
