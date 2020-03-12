@@ -1,10 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
-
+const path = require('path');
 const app = express();
 
-
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 /* offset se pasa parametro por Url, ofsset es 0 en la primera pagina.
 En la segunda es 1, etc..
@@ -61,7 +61,7 @@ app.get('/api/', (req, res) => {
 //this could be a route for the apicall
 
 app.get('/api/:searchTerm/:id', (req, res) => {
-    console.log("works")
+    console.log("calling API");
     let pageNo = parseInt(req.params.id);
     let offset = "&offset=" + pageNo;
     let { searchTerm } = req.params;  
@@ -88,7 +88,7 @@ app.get('/api/:searchTerm/:id', (req, res) => {
               city: result.address.city_name
          }
      })
-     
+     console.log("Sending Results", "\ntotalpages:", pagination);
      res.json({
          totalPages: pagination,
          actualPage: pageNo,
@@ -125,7 +125,9 @@ app.get("/test", (req, res) => {
     res.send("done");
 })
 
-
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 
 const PORT = 5000 || process.env.PORT;
 app.listen(PORT, () => {

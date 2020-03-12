@@ -30,6 +30,7 @@ p {
 }
 
 
+
 .button-container  {
     margin: 20px 0;
     span{
@@ -72,4 +73,9 @@ p {
     border: 1px solid #0573BE;
     padding: 5px;
     background-color: #eee;
+}
+
+.active {
+    font-weight: bold;
+    background-color: #aaa;
 }
