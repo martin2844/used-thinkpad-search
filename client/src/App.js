@@ -134,6 +134,7 @@ const App = () => {
      <div className="button-container">
        <span onClick={e => onClick(e)}>Thinkpad Carbon</span>
        <span onClick={e => onClick(e)}>Thinkpad T430</span>
+       <span onClick={e => onClick(e)}>Thinkpad T450</span>
        <span onClick={e => onClick(e)}>Thinkpad W540</span>
        <span onClick={e => onClick(e)}>All Thinkpads</span>
      </div>
