@@ -79,3 +79,26 @@ p {
     font-weight: bold;
     background-color: #aaa;
 }
+
+
+
+
+@media screen and (max-width: 1050px) {
+    .button-container  {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 5px 0;
+        span{
+        &:nth-child(n) {
+            margin: 8px 8px;
+            padding: 5px 12.5px;
+            background-color: rebeccapurple;
+            font-family: 'Montserrat';
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+        } 
+    }
+    }
+}
