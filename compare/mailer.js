@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 require('dotenv').config();
 
 
-const mail = async (data) => {
+const mail = async (data, term) => {
 
 
     let transporter = nodemailer.createTransport({
@@ -15,7 +15,7 @@ const mail = async (data) => {
     });
      
 
-    //leer con fs el archivo y mandarlo en texto. Facil. O loopear y armar un lindo HTML
+    // Map de los items diferenciados, para poder mostrarlos mejor.
     let html = '<div>' + data.map((item)=> {
         return(
             `<div style="max-width: 200px; background-color: #ccc; border: 1px solid black; margin: 20px 10px">
@@ -30,26 +30,15 @@ const mail = async (data) => {
         )
     }).join('') + '</div>' + "\n";
 
-    console.log(html);
-
+    // mensaje del nodemailer
     const message = await transporter.sendMail({
         from: process.env.EMAIL, // sender address
         to: "martinchammah@gmail.com", // list of receivers
-        subject: "New Thinkpads of " + Date(), // Subject line
+        subject: `New ${term}s of ` + Date(), // Subject line
         html: html
       });
 
       console.log(message);
-
-    //   transport.sendMail(message, function(err, info) {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log(info);
-
-    //     }
-    // });
-
     
 
 

@@ -99,7 +99,7 @@ app.get('/api/:searchTerm/:id', (req, res) => {
     
 })
 
-compare();
+compare("thinkpad w540");
 
 app.get("/test", (req, res) => {
     const start = new Date();
