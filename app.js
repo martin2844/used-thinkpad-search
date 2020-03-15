@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const compare = require('./compare/compare');
-
+const {compare, getPages, processData} = require('./compare/compare');
+const axios = require('axios');
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 /* offset se pasa parametro por Url, ofsset es 0 en la primera pagina.
@@ -30,7 +30,7 @@ offset a poner en el axios de llamada para cada pagina via req.params.id:
 
 
 */
-app.get('/api/', (req, res) => {
+app.get('/api/testing', (req, res) => {
     console.log("works")
     
     
@@ -59,7 +59,7 @@ app.get('/api/', (req, res) => {
 
 //this could be a route for the apicall
 
-app.get('/api/:searchTerm/:id', (req, res) => {
+app.get('/api/search/:searchTerm/:id', (req, res) => {
     console.log("calling API");
     let pageNo = parseInt(req.params.id);
     let offset = "&offset=" + pageNo;
@@ -99,7 +99,29 @@ app.get('/api/:searchTerm/:id', (req, res) => {
     
 })
 
-compare("thinkpad w540");
+//check.then works. Podria pasarse dentro del then la nueva funcion?
+// let check = getPages("thinkpad t450");
+
+let resulta = async () => {
+    // first round of promise to get pages amount status: WORKING
+    const pages = await getPages("thinkpad w540");
+    //second round of promises to get all results. status: WORKING
+    const data = await compare("thinkpad w540", pages);
+    // third round of promises to do all file processing  status: Need to make async file system reads return. 
+    // Currently function returns normal result not async
+    const lacka = await processData("thinkpad w540", data)
+    return lacka;
+}
+
+
+resulta().then(x => console.log(x, "return of results"))
+
+// app.get("/api/compare/:term", (req, res) => {
+//     let {term} = req.params
+//     let data = compare(term);
+//     data.then(x => console.log(x));
+//     res.send(data);
+// }) 
 
 app.get("/test", (req, res) => {
     const start = new Date();

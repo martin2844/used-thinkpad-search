@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 require('dotenv').config();
 
 
-const mail = async (data, term) => {
+const mail = async (data, term, email) => {
 
 
     let transporter = nodemailer.createTransport({
@@ -33,12 +33,12 @@ const mail = async (data, term) => {
     // mensaje del nodemailer
     const message = await transporter.sendMail({
         from: process.env.EMAIL, // sender address
-        to: "martinchammah@gmail.com", // list of receivers
+        to: email || "martinchammah@gmail.com", // list of receivers
         subject: `New ${term}s of ` + Date(), // Subject line
         html: html
       });
 
-      console.log(message);
+      return message;
     
 
 
