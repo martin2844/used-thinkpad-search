@@ -107,10 +107,9 @@ let resulta = async () => {
     const pages = await getPages("thinkpad w540");
     //second round of promises to get all results. status: WORKING
     const data = await compare("thinkpad w540", pages);
-    // third round of promises to do all file processing  status: Need to make async file system reads return. 
-    // Currently function returns normal result not async
-    const lacka = await processData("thinkpad w540", data)
-    return lacka;
+    // third round of promises to do all file processing
+    const lastly = await processData("thinkpad w540", data)
+    return lastly;
 }
 
 

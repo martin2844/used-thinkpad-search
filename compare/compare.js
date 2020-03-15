@@ -49,7 +49,7 @@ let compare = async (term, pages) => {
                 )
         )
     }
-
+    
     return await Promise.all(promises).then(() => {
         return arrayToStore
     });
@@ -71,15 +71,29 @@ const processData = async (term, arrayToStore) => {
     }   
 
     let rawDataFromYesterday = await readJSON();
-    let difference = _.differenceBy(arrayToStore[0], rawDataFromYesterday[0], 'id');
-    //must fix differences;
+    let parsedData = JSON.parse(rawDataFromYesterday);
+    let difference = _.differenceBy(arrayToStore[0], parsedData[0], 'id');
+    // difference variable return the new laptops, or the deleted ones. Differences...
     console.log(difference);
-
     if (checkFile()) {
         if (difference.length) {
-            return "differences!";
+            //Write difference to files
+            fs.writeFileSync('./compare/New' + term + '.json', JSON.stringify(difference));
+            //send New Mail with differences found.
+            // let newMail = mail(difference, term);
+            //Finally write over yesterday's file to compare for tomorrow
+            fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
+            //Finally Return Status
+            return {
+                content: difference,
+                message: "These were the differences, items could be new or deleted.",
+                info: "an email was sent, details are the following:"
+            }
+      
+            // aca devolver diferencias pero guardar igual para futuras comps.
         } else {
             return "no difference";
+            //aca guardar si no hay diferencia
         }
 
 
