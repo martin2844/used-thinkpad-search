@@ -104,11 +104,11 @@ app.get('/api/search/:searchTerm/:id', (req, res) => {
 
 let resulta = async () => {
     // first round of promise to get pages amount status: WORKING
-    const pages = await getPages("thinkpad w540");
+    const pages = await getPages("thinkpad x200");
     //second round of promises to get all results. status: WORKING
-    const data = await compare("thinkpad w540", pages);
+    const data = await compare("thinkpad x200", pages);
     // third round of promises to do all file processing
-    const lastly = await processData("thinkpad w540", data)
+    const lastly = await processData("thinkpad x200", data)
     return lastly;
 }
 

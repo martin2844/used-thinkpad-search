@@ -62,7 +62,12 @@ const processData = async (term, arrayToStore) => {
     let DATA;
     //returns true if file exists..
     const checkFile = async () => {
-        return await fs.existsSync(path);
+        try {
+            return await fs.existsSync(path);
+        } catch (error) {
+            return error;
+        }
+        
         
     }
 
@@ -70,13 +75,15 @@ const processData = async (term, arrayToStore) => {
       return readFile('./compare/yesterday-' + term + '.json');
     }   
 
-    let rawDataFromYesterday = await readJSON();
-    let parsedData = JSON.parse(rawDataFromYesterday);
-    let difference = _.differenceBy(arrayToStore[0], parsedData[0], 'id');
-    // difference variable return the new laptops, or the deleted ones. Differences...
-    console.log(difference);
+
     if (checkFile()) {
+        let rawDataFromYesterday = await readJSON();
+        let parsedData = JSON.parse(rawDataFromYesterday);
+        let difference = _.differenceBy(arrayToStore[0], parsedData[0], 'id');
+        // difference variable return the new laptops, or the deleted ones. Differences...
+        console.log(difference);
         if (difference.length) {
+            
             //Write difference to files
             fs.writeFileSync('./compare/New' + term + '.json', JSON.stringify(difference));
             //send New Mail with differences found.
@@ -92,14 +99,23 @@ const processData = async (term, arrayToStore) => {
       
             // aca devolver diferencias pero guardar igual para futuras comps.
         } else {
-            return "no difference";
-            //aca guardar si no hay diferencia
+            return {
+                content: null,
+                message: "There were no difference from last consultation",
+                info: "The file" + './compare/New'+ term + '.json' + ' was cleaned'
+               }
+            }
+    }
+     else {
+        console.error("error");
+        console.log("file did not exist, writing new file");
+        fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
+        return {
+            content: arrayToStore,
+            message: "There were no registries of the consultation",
+            info: "Writing new file to ' " +  path + "'"
         }
-
-
-        
-    } else {
-        return "File does not exists" 
+       
     }
     
     //so, if file exists, call async function ReadJSON.
@@ -163,25 +179,25 @@ const processData = async (term, arrayToStore) => {
     //                 } else {
     //                     console.log("no new entries, cleaning up JSON"); 
     //                     fs.writeFileSync('./compare/New'+ term + '.json', []);
-    //                     DATA = {
-    //                         content: null,
-    //                         message: "There were no difference from last consultation",
-    //                         info: "The file" + './compare/New'+ term + '.json' + ' was cleaned'
-    //                     }
+                        // DATA = {
+                        //     content: null,
+                        //     message: "There were no difference from last consultation",
+                        //     info: "The file" + './compare/New'+ term + '.json' + ' was cleaned'
+                        // }
     //                     console.log(DATA, "data2");
     //                     return DATA;
     //                 }
 
     //           
     //         } else {
-    //             console.error("error");
-    //             console.log("file did not exist, writing new file");
-    //             fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
-    //             DATA = {
-    //                 content: arrayToStore,
-    //                 message: "There were no registries of the consultation",
-    //                 info: "Writing new file to ' " +  path + "'"
-    //             }
+                // console.error("error");
+                // console.log("file did not exist, writing new file");
+                // fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
+                // DATA = {
+                //     content: arrayToStore,
+                //     message: "There were no registries of the consultation",
+                //     info: "Writing new file to ' " +  path + "'"
+                // }
     //             console.log(DATA, "data2");
     //             return DATA;
 

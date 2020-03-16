@@ -1,0 +1,47 @@
+[
+    {
+        "id": "MLA837381125",
+        "title": "Dockstation Lenovo X200",
+        "price": 1600,
+        "link": "https://articulo.mercadolibre.com.ar/MLA-837381125-dockstation-lenovo-x200-_JM",
+        "image": "http://mla-s2-p.mlstatic.com/672280-MLA40641701707_022020-O.jpg",
+        "state": "Buenos Aires",
+        "city": "isidro casanova"
+    },
+    {
+        "id": "MLA835187636",
+        "title": "Notebook Lenovo T450 Corei5 Usada Leer Descripcion ",
+        "price": 33000,
+        "link": "https://articulo.mercadolibre.com.ar/MLA-835187636-notebook-lenovo-t450-corei5-usada-leer-descripcion-_JM",
+        "image": "http://mla-s1-p.mlstatic.com/761559-MLA40491634097_012020-O.jpg",
+        "state": "Capital Federal",
+        "city": "villa urquiza"
+    },
+    {
+        "id": "MLA836223405",
+        "title": "Laptop Lenovo Thinkpad T460",
+        "price": 28500,
+        "link": "https://articulo.mercadolibre.com.ar/MLA-836223405-laptop-lenovo-thinkpad-t460-_JM",
+        "image": "http://mla-s2-p.mlstatic.com/632808-MLA40565094785_012020-O.jpg",
+        "state": "Capital Federal",
+        "city": "Balvanera"
+    },
+    {
+        "id": "MLA840072863",
+        "title": "Notebook Lenovo L430 Corei5 Leer Descripcion Usada Barta",
+        "price": 22000,
+        "link": "https://articulo.mercadolibre.com.ar/MLA-840072863-notebook-lenovo-l430-corei5-leer-descripcion-usada-barta-_JM",
+        "image": "http://mla-s2-p.mlstatic.com/964777-MLA40835237638_022020-O.jpg",
+        "state": "Capital Federal",
+        "city": "villa urquiza"
+    },
+    {
+        "id": "MLA833222056",
+        "title": "Repuestos /partes X240 Lenovo Modulo Pantalla Bateria Disco ",
+        "price": 1400,
+        "link": "https://articulo.mercadolibre.com.ar/MLA-833222056-repuestos-partes-x240-lenovo-modulo-pantalla-bateria-disco-_JM",
+        "image": "http://mla-s1-p.mlstatic.com/617183-MLA32870674127_112019-O.jpg",
+        "state": "Buenos Aires",
+        "city": "Lomas de Zamora"
+    }
+]
