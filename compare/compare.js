@@ -61,6 +61,7 @@ const processData = async (term, arrayToStore) => {
     let path = ('./compare/yesterday-' + term + '.json');
     let DATA;
     //returns true if file exists..
+    
     const checkFile = async () => {
         try {
             return await fs.existsSync(path);
@@ -70,13 +71,20 @@ const processData = async (term, arrayToStore) => {
         
         
     }
-
+   
     const readJSON = async () => {
-      return readFile('./compare/yesterday-' + term + '.json');
+        try {
+            console.log("entered try")
+            let data = readFile('./compare/yesterday-' + term + '.json');
+            return data;
+        } catch (error) {
+            console.log(error, "catch")
+            return error;
+        }
+      
     }   
-
-
-    if (checkFile()) {
+   
+    if (await checkFile()) {
         let rawDataFromYesterday = await readJSON();
         let parsedData = JSON.parse(rawDataFromYesterday);
         let difference = _.differenceBy(arrayToStore[0], parsedData[0], 'id');
@@ -118,97 +126,6 @@ const processData = async (term, arrayToStore) => {
        
     }
     
-    //so, if file exists, call async function ReadJSON.
-
-
- // if (fs.existsSync(path)) {
-    //     console.log("file exists, reading data from yesterday")
-    //         fs.readFile('./compare/yesterday-' + term + '.json', (err, data) => {
-    //         let rawDataFromYesterday = JSON.parse(data);
-    //         if (JSON.stringify(rawDataFromYesterday) !== JSON.stringify(arrayToStore)) {
-    //             //Then Check difference using id, otherwise it did not work. Using lodash to help.
-    //             let difference = _.differenceBy(arrayToStore[0], rawDataFromYesterday[0], 'id');
-    //             fs.writeFileSync('./compare/New' + term + '.json', JSON.stringify(difference));
-    //             //if they are different save the new file.
-    //             //Then send it via mail
-    //             console.log("different entries, wrote difference to JSON");
-    //             // let newMail = mail(difference, term);
-    //             fs.writeFileSync('./compare/yesterday-' + term + '.json', JSON.stringify(arrayToStore));
-    //             DATA = {
-    //                 content: difference,
-    //                 message: "These were the differences, items could be new or deleted.",
-    //                 info: "an email was sent, details are the following:"
-    //             }
-    //             return DATA;
-    //         } else {
-    //             console.log("no new entries, cleaning up JSON");
-    //             fs.writeFileSync('./compare/New' + term + '.json', []);
-    //             DATA = {
-    //                 content: null,
-    //                 message: "There were no difference from last consultation",
-    //                 info: "The file" + './compare/New' + term + '.json' + ' was cleaned'
-    //             }
-                
-    //             return DATA;
-    //         }
-    //     })
-        
-    // }
-
-    //             console.log("Loop Finished. Reading data from Yesterday")
-    //             fs.readFile('./compare/yesterday-' + term +'.json', (err, data) => {
-    //                 if (err) throw err;
-    //                 let rawDataFromYesterday = JSON.parse(data);
-    //                 // test
-    //                 //first convert both items to check to JSON strings in order to check them.
-    //                 if(JSON.stringify(rawDataFromYesterday) !== JSON.stringify(arrayToStore)) {
-    //                     //Then Check difference using id, otherwise it did not work. Using lodash to help.
-    //                     let difference = _.differenceBy(arrayToStore[0], rawDataFromYesterday[0],'id');
-    //                     fs.writeFileSync('./compare/New'+ term + '.json', JSON.stringify(difference));
-    //                     //if they are different save the new file.
-    //                     //Then send it via mail
-    //                     console.log("different entries, wrote difference to JSON");
-    //                     let newMail = mail(difference, term);
-    //                     fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
-    //                     DATA = {
-    //                         content: difference,
-    //                         message: "These were the differences, items could be new or deleted.",
-    //                         info: "an email was sent, details are the following:"
-    //                     }
-    //                     return DATA;
-    //                 } else {
-    //                     console.log("no new entries, cleaning up JSON"); 
-    //                     fs.writeFileSync('./compare/New'+ term + '.json', []);
-                        // DATA = {
-                        //     content: null,
-                        //     message: "There were no difference from last consultation",
-                        //     info: "The file" + './compare/New'+ term + '.json' + ' was cleaned'
-                        // }
-    //                     console.log(DATA, "data2");
-    //                     return DATA;
-    //                 }
-
-    //           
-    //         } else {
-                // console.error("error");
-                // console.log("file did not exist, writing new file");
-                // fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
-                // DATA = {
-                //     content: arrayToStore,
-                //     message: "There were no registries of the consultation",
-                //     info: "Writing new file to ' " +  path + "'"
-                // }
-    //             console.log(DATA, "data2");
-    //             return DATA;
-
-    //         }
-
-
-
-
-
-
-    // }
 
   return DATA;
 

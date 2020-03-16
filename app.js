@@ -102,18 +102,25 @@ app.get('/api/search/:searchTerm/:id', (req, res) => {
 //check.then works. Podria pasarse dentro del then la nueva funcion?
 // let check = getPages("thinkpad t450");
 
-let resulta = async () => {
+let result = async () => {
     // first round of promise to get pages amount status: WORKING
-    const pages = await getPages("thinkpad x200");
+    const pages = await getPages("thinkpad x220");
     //second round of promises to get all results. status: WORKING
-    const data = await compare("thinkpad x200", pages);
+    const data = await compare("thinkpad x220", pages);
     // third round of promises to do all file processing
-    const lastly = await processData("thinkpad x200", data)
+    const lastly = await processData("thinkpad x220", data)
     return lastly;
 }
 
+app.get("/thetest", (req, res) => {
+    result().then(x => {
+        res.send(x);
+    })
+})
 
-resulta().then(x => console.log(x, "return of results"))
+// result().then(x => console.log(x, "return of results"))
+
+
 
 // app.get("/api/compare/:term", (req, res) => {
 //     let {term} = req.params
