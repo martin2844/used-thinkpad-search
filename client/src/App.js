@@ -52,14 +52,14 @@ const App = () => {
     // Initial Search
     useEffect(() => {
       console.log("useEffect");
-      axios.get(`/api/thinkpad/0`).then((response) => {
+      axios.get(`/api/search/thinkpad/0`).then((response) => {
         dispatch({type: 'FINISH', payload: response.data})
       });  
     },[])
  
     //subsequent searches
     const updateResults = (term, page) => {
-      axios.get(`/api/${term}/${page}`).then((response) => {
+      axios.get(`/api/search/${term}/${page}`).then((response) => {
         dispatch({type: 'FINISH', payload: response.data})
       });
 
@@ -101,7 +101,7 @@ const App = () => {
       return (
         
 
-        <span onClick={() => changePage(page)} className={"pagination-item " + (page === state.page ? "active" : "inactive")}>
+        <span key={page} onClick={() => changePage(page)} className={"pagination-item " + (page === state.page ? "active" : "inactive")}>
           {page + 1}
         </span>
       )
