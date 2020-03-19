@@ -34,20 +34,6 @@ p {
 
 
 
-.button-container  {
-    margin: 20px 0;
-    span{
-    &:nth-child(n) {
-        margin: 0 15px;
-        padding: 10px 25px;
-        background-color: rebeccapurple;
-        font-family: 'Montserrat';
-        border-radius: 20px;
-        color: white;
-        cursor: pointer;
-    } 
-}
-}
 
 .pagination-item {
     
@@ -92,16 +78,5 @@ p {
         flex-direction: row;
         flex-wrap: wrap;
         margin: 5px 0;
-        span{
-        &:nth-child(n) {
-            margin: 8px 8px;
-            padding: 5px 12.5px;
-            background-color: rebeccapurple;
-            font-family: 'Montserrat';
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-        } 
-    }
     }
 }

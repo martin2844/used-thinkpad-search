@@ -13,7 +13,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -21,6 +20,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { Link } from '@reach/router';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -70,6 +70,17 @@ export default function Navbar() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
+   <List>
+        {['About', 'Profile', 'Thinkpads'].map((text) => {
+            
+            let url = text.toLowerCase();
+            return (
+          <ListItem component={Link} to={url} button key={text}>
+            <ListItemText primary={text} />
+          </ListItem>
+        )})}
+      </List>
+    <Divider />
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem button key={text}>

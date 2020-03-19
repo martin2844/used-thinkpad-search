@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import {Router, Link} from '@reach/router';
+import {Router} from '@reach/router';
 import Layout from './layout/Layout';
 
 
@@ -16,13 +16,10 @@ const App = () => {
   
   return (
     <Layout>
-      <Link to="/about">About</Link>
-      <Link to="/profile">Profile</Link>
-      <Link to="/thinkpad">ThinkpadSearch</Link>
           <Router>
               <About path="/about" />
               <Profile path="/profile" />
-              <ThinkpadSearch path="/thinkpad" />
+              <ThinkpadSearch path="/thinkpads" />
         </Router>
     </Layout>
   )

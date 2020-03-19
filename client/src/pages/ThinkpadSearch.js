@@ -6,8 +6,24 @@ import Listing from '../components/Listing';
 import '../App.scss';
 import Spinner from '../components/Spinner';
 
-const ThinkpadSearch = () => {
+//Material Ui components
 
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      textAlign: "center",
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+  }));
+
+
+const ThinkpadSearch = () => {
+    const classes = useStyles();
+    
     const initialState = {
         term: "thinkpad",
         page: 0,
@@ -138,12 +154,13 @@ const ThinkpadSearch = () => {
         <div>
             <h1>Used Thinkpad Meli Search</h1>
      <h3>My favourite thinkpads</h3>
-     <div className="button-container">
-       <span onClick={e => onClick(e)}>Thinkpad Carbon</span>
-       <span onClick={e => onClick(e)}>Thinkpad T430</span>
-       <span onClick={e => onClick(e)}>Thinkpad T450</span>
-       <span onClick={e => onClick(e)}>Thinkpad W540</span>
-       <span onClick={e => onClick(e)}>All Thinkpads</span>
+     <div className={classes.root}>
+         
+       <Button variant="outlined" color="primary" onClick={e => onClick(e)}>Thinkpad Carbon</Button>
+       <Button variant="outlined" color="primary" onClick={e => onClick(e)}>Thinkpad T430</Button>
+       <Button variant="outlined" color="primary" onClick={e => onClick(e)}>Thinkpad T450</Button>
+       <Button variant="outlined" color="primary" onClick={e => onClick(e)}>Thinkpad W540</Button>
+       <Button variant="outlined" color="primary" onClick={e => onClick(e)}>All Thinkpads</Button>
      </div>
      
       <div style={state.loading ? {minHeight: "500px", alignItems: "center"} : null} className="card-map"> 
