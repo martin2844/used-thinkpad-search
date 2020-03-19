@@ -70,14 +70,14 @@ const ThinkpadSearch = () => {
         // Initial Search
         useEffect(() => {
           console.log("useEffect");
-          axios.get(`/api/search/thinkpad/0`).then((response) => {
+          axios.get(`/api/search/notebook/thinkpad/0`).then((response) => {
             dispatch({type: 'FINISH', payload: response.data})
           });  
         },[])
      
         //subsequent searches
         const updateResults = (term, page) => {
-          axios.get(`/api/search/${term}/${page}`).then((response) => {
+          axios.get(`/api/search/notebook/${term}/${page}`).then((response) => {
             dispatch({type: 'FINISH', payload: response.data})
           });
     

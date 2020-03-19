@@ -71,9 +71,9 @@ export default function Navbar() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
    <List>
-        {['About', 'Profile', 'Thinkpads'].map((text) => {
-            
+        {['Home', 'About', 'Profile', 'Thinkpads'].map((text) => {
             let url = text.toLowerCase();
+            if (url === 'home') { url = "" };
             return (
           <ListItem component={Link} to={url} button key={text}>
             <ListItemText primary={text} />
@@ -117,7 +117,7 @@ export default function Navbar() {
 
   return (
     <div className={classes.root}>
-      <FormGroup>
+      <FormGroup style={{display: "none"}}>
         <FormControlLabel
           control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
           label={auth ? 'Logout' : 'Login'}
@@ -125,14 +125,12 @@ export default function Navbar() {
       </FormGroup>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon onClick={toggleDrawer("left", true)} />
-            <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-            {list("left")}
-          </Drawer>
+          <IconButton onClick={toggleDrawer("left", true)}  edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+           
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Photos
+            Used Hardware Search!
           </Typography>
           {auth && (
             <div>
@@ -167,6 +165,9 @@ export default function Navbar() {
           )}
         </Toolbar>
       </AppBar>
+      <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
+            {list("left")}
+             </Drawer>
     </div>
   );
 }

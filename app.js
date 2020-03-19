@@ -59,7 +59,7 @@ app.get('/api/testing', (req, res) => {
 
 //this could be a route for the apicall
 
-app.get('/api/search/:searchTerm/:id', (req, res) => {
+app.get('/api/search/notebook/:searchTerm/:id', (req, res) => {
     console.log("calling API");
     let pageNo = parseInt(req.params.id);
     let offset = "&offset=" + pageNo;
@@ -98,6 +98,54 @@ app.get('/api/search/:searchTerm/:id', (req, res) => {
     });
     
 })
+
+//Search global route
+app.get('/api/search/:searchTerm/:id', (req, res) => {
+    console.log("calling API");
+    let pageNo = parseInt(req.params.id);
+    let offset = "&offset=" + pageNo;
+    let { searchTerm } = req.params;  
+    let categoryFilter;
+    
+    axios.get('https://api.mercadolibre.com/sites/MLA/search?q='+ searchTerm +'&condition=used&' + offset)
+    .then(function (response) {
+     // handle success
+     let {results} = response.data;
+     //begin calculation of pages
+     let amount = response.data.paging.primary_results;
+     console.log(amount);
+     let pagination = Math.ceil(amount / 50);
+
+     let available_cats = response.data.available_filters.filter(data => {
+        return data.id === "category";
+     })
+     //Object of things that I want to see.
+     const whatMatters = results.map((result) => {
+         let image = result.thumbnail.replace("I.jpg", "O.jpg");
+          return importante = {
+              id: result.id,
+              title: result.title,
+              price: result.price,
+              link: result.permalink,
+              image: image,
+              state: result.address.state_name,
+              city: result.address.city_name
+         }
+     })
+     console.log("Sending Results", "\ntotalpages:", pagination);
+     res.json({
+         totalPages: pagination,
+         actualPage: pageNo,
+         articles: whatMatters,
+         cats: available_cats[0].values
+        }); 
+
+      
+    });
+    
+})
+
+
 
 //check.then works. Podria pasarse dentro del then la nueva funcion?
 // let check = getPages("thinkpad t450");
