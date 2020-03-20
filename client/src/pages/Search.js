@@ -22,21 +22,14 @@ const useStyles = makeStyles(theme => ({
 
 const Search = () => {
 
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedF: true,
-        checkedG: true,
-      });
     
-      const handleChange = event => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-      };
 
+    const [state, setState] = React.useState({});
     const [search, setSearch] = useState('');
     const [results, setResults] = useState({
         data: {},
         isLoading: false,
+        checkBoxState: {},
     })
     const classes = useStyles();
     console.log(search)
@@ -45,11 +38,37 @@ const Search = () => {
         setResults({...results, isLoading: true})
         console.log("useEffect");
         axios.get(`/api/search/${search}/0`).then((response) => {
-        setResults({...results, data: response.data})
+       
+        let objectMap = () => {
+          let cats;
+          let objectToReturn;
+          if (response.data.cats) {cats = response.data.cats
+          cats.forEach((cat) => {
+            objectToReturn = {
+              ...objectToReturn,
+              [cat.id]: false
+            }
+          })
+          return objectToReturn;
+        };
+        }
+        let checkBoxMap = objectMap();
+        setResults({...results, data: response.data, checkBoxState: checkBoxMap })
+
+
         }).then(setResults({...results, isLoading: false}));  
       },[search])
+
+      useEffect(()=>{
+        setState(results.checkBoxState);
+      }, [results.checkBoxState])
+
+
     
-      console.log(results.data.cats);
+
+      const handleChange = event => {
+        setState({ ...state, [event.target.name]: event.target.checked });
+      };
 
       const displayChecks = () => {
 
@@ -61,11 +80,12 @@ const Search = () => {
           return cats.map((cat) => {
               return(
                 <FormControlLabel
+                key={cat.id}
                 control={
                   <Checkbox
-                    checked={state.checkedB}
+                    checked={state[cat.id] || false}
                     onChange={handleChange}
-                    name={cat.name}
+                    name={cat.id || ""}
                     color="primary"
                   />
                 }
