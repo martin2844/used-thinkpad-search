@@ -3,7 +3,12 @@ const path = require('path');
 const app = express();
 const {compare, getPages, processData} = require('./compare/compare');
 const axios = require('axios');
+//body parser necessary to parse body for express
+const bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+// parse application/json
+app.use(bodyParser.json())
 
 /* offset se pasa parametro por Url, ofsset es 0 en la primera pagina.
 En la segunda es 1, etc..
@@ -119,6 +124,60 @@ app.get('/api/search/:searchTerm/:id', (req, res) => {
      let available_cats = response.data.available_filters.filter(data => {
         return data.id === "category";
      })
+     //Object of things that I want to see.
+     const whatMatters = results.map((result) => {
+         let image = result.thumbnail.replace("I.jpg", "O.jpg");
+          return importante = {
+              id: result.id,
+              title: result.title,
+              price: result.price,
+              link: result.permalink,
+              image: image,
+              state: result.address.state_name,
+              city: result.address.city_name
+         }
+     })
+     console.log("Sending Results", "\ntotalpages:", pagination);
+     res.json({
+         totalPages: pagination,
+         actualPage: pageNo,
+         articles: whatMatters,
+         cats: available_cats[0].values
+        }); 
+
+      
+    });
+    
+})
+
+//Search global route
+app.post('/api/search/:searchTerm/:id', (req, res) => {
+    console.log("calling API");
+    console.log(req.body)
+    let filter = "&category=" + req.body.filter;
+    let pageNo = parseInt(req.params.id);
+    let offset = "&offset=" + pageNo;
+    let { searchTerm } = req.params;  
+
+    axios.get('https://api.mercadolibre.com/sites/MLA/search?q='+ searchTerm + filter +'&condition=used&' + offset )
+    .then(function (response) {
+     // handle success
+     let {results} = response.data;
+     //begin calculation of pages
+     let amount = response.data.paging.primary_results;
+     console.log(amount);
+     let pagination = Math.ceil(amount / 50);
+
+     let available_cats = response.data.available_filters.filter(data => {
+        return data.id === "category";
+     })
+
+     if(available_cats.length === 0) {
+         available_cats.push({
+             values: ["no more subcats"]
+         })
+     }
+     console.log(available_cats);
      //Object of things that I want to see.
      const whatMatters = results.map((result) => {
          let image = result.thumbnail.replace("I.jpg", "O.jpg");
