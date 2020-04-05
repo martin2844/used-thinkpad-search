@@ -2,13 +2,24 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const {compare, getPages, processData} = require('./compare/compare');
+const {compare2, getPages2, processData2} = require('./compare/comparedb');
 const axios = require('axios');
 //body parser necessary to parse body for express
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose');
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // parse application/json
 app.use(bodyParser.json())
+
+
+mongoose.connect( "mongodb+srv://" + process.env.MONGO + "@cluster0-ekehs.mongodb.net/test?retryWrites=true&w=majority", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+   }).then(() => {
+    console.log('connected to database');
+   });
+
 
 /* offset se pasa parametro por Url, ofsset es 0 en la primera pagina.
 En la segunda es 1, etc..
@@ -253,6 +264,24 @@ app.get("/test", (req, res) => {
     for (var i = 1; i < 100; i++) length();
     console.log("done",Date.now() - start);
     res.send("done");
+})
+
+
+let result2 = async (term) => {
+    let searchTerm = term || "thinkpad x220";
+    // first round of promise to get pages amount status: WORKING
+    const pages = await getPages2(searchTerm);
+    //second round of promises to get all results. status: WORKING
+    const data = await compare2(searchTerm, pages);
+    // third round of promises to do all file processing
+    const lastly = await processData2(searchTerm, data)
+    return lastly;
+}
+
+// test route for DB save
+app.get("/test2", (req, res) => {
+    result2().then(x => res.send(x));
+    
 })
 
 
