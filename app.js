@@ -220,7 +220,7 @@ app.post('/api/search/:searchTerm/:id', (req, res) => {
 //check.then works. Podria pasarse dentro del then la nueva funcion?
 // let check = getPages("thinkpad t450");
 
-let result = async (term) => {
+let saveQueryToFS = async (term) => {
     let searchTerm = term || "thinkpad x220";
     // first round of promise to get pages amount status: WORKING
     const pages = await getPages(term);
@@ -231,12 +231,42 @@ let result = async (term) => {
     return lastly;
 }
 
-app.post("/api/compare/:term", (req, res) => {
+
+let saveQueryToDB = async (term, mail) => {
+    let searchTerm = term || "thinkpad x240";
+    // first round of promise to get pages amount status: WORKING
+    const pages = await getPages2(searchTerm);
+    //second round of promises to get all results. status: WORKING
+    const data = await compare2(searchTerm, pages);
+    // third round of promises to do all file processing
+    const lastly = await processData2(searchTerm, data, mail)
+    return lastly;
+}
+
+
+
+app.post("/api/comparetofs/:term", (req, res) => {
     const {term} = req.params
-    result(term).then(x => {
+    saveQueryToFS(term).then(x => {
         res.send(x);
     })
 });
+
+
+app.post("/api/comparetodb/:term", (req, res) => {
+    const {term} = req.params
+    saveQueryToDB(term).then(x => {
+        res.send(x);
+    })
+});
+
+
+// test route for DB save
+app.get("/compare", (req, res) => {
+    result2().then(x => res.send(x));
+    
+})
+
 
 
 app.get("/test", (req, res) => {
@@ -267,22 +297,7 @@ app.get("/test", (req, res) => {
 })
 
 
-let result2 = async (term) => {
-    let searchTerm = term || "thinkpad w540";
-    // first round of promise to get pages amount status: WORKING
-    const pages = await getPages2(searchTerm);
-    //second round of promises to get all results. status: WORKING
-    const data = await compare2(searchTerm, pages);
-    // third round of promises to do all file processing
-    const lastly = await processData2(searchTerm, data)
-    return lastly;
-}
 
-// test route for DB save
-app.get("/test2", (req, res) => {
-    result2().then(x => res.send(x));
-    
-})
 
 
 

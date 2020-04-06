@@ -62,7 +62,7 @@ let compare = async (term, pages) => {
 }
 
 
-const processData = async (term, arrayToStore) => {
+const processData = async (term, arrayToStore, mail) => {
     // //Define path to save JSON Files
     // let path = ('./compare/yesterday-' + term + '.json');
     // let DATA;
@@ -126,18 +126,17 @@ const processData = async (term, arrayToStore) => {
         // @@@ We are here now. If there are differences should try this out.
         if (difference.length) {
             
-            //Write difference to files
-            fs.writeFileSync('./compare/New' + term + '.json', JSON.stringify(difference));
-
+           
             const newDifference = new Compare({
                 query: term,
                 type: "difference",
                 data: difference
             });
+            
             const newDif = await newDifference.save();
 
             //send New Mail with differences found.
-            // let newMail = mail(difference, term);
+            let newMail = mail(difference, term, mail);
             //Finally write over yesterday's file to compare for tomorrow
 
             fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
@@ -155,28 +154,26 @@ const processData = async (term, arrayToStore) => {
       
             // aca devolver diferencias pero guardar igual para futuras comps.
         } else {
+            let pastDifferences = await Compare.findOneAndUpdate({query: term, type:"difference" }, {data: []}, {new: true});
             return {
-                content: null,
+                content: pastDifferences,
                 message: "There were no difference from last consultation",
-                info: "The file" + './compare/New'+ term + '.json' + ' was cleaned'
+                info: `the document on the DB storing past differences for ${term} was cleaned up`
                }
             }
     }
      else {
-        console.error("error");
-        console.log("file did not exist, writing new file");
-        fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
+       
         const newFile = new Compare({
             query: term,
             type: "scratch",
             data: arrayToStore
         })
         const newLog = await newFile.save();
-        // console.log(newLog, "save");
         return {
             content: arrayToStore,
-            message: "There were no registries of the consultation",
-            info: "Writing new file to ' "+ "'"
+            message: "There were no registries that the consultation was done before",
+            info: `Writting new file to database, the Id is: ${newLog._id}`
         }
        
     }
