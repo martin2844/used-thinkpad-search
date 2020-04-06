@@ -97,7 +97,7 @@ const processData = async (term, arrayToStore) => {
 
     const readDB = async () => {
         try {
-            const query = await Compare.findOne({query: term }, (err, query) => {
+            const query = await Compare.findOne({query: term, type:"scratch" }, (err, query) => {
                 return query;
             });
             return query;
@@ -121,17 +121,31 @@ const processData = async (term, arrayToStore) => {
     if (await checkDB()) {
         let rawDataFromYesterday = await readDB();
         let difference = _.differenceBy(arrayToStore[0], rawDataFromYesterday.data[0], 'id');
-        console.log(difference);
+        console.log(difference, "is there a differences??");
         // difference variable return the new laptops, or the deleted ones. Differences...
         // @@@ We are here now. If there are differences should try this out.
         if (difference.length) {
             
             //Write difference to files
             fs.writeFileSync('./compare/New' + term + '.json', JSON.stringify(difference));
+
+            const newDifference = new Compare({
+                query: term,
+                type: "difference",
+                data: difference
+            });
+            const newDif = await newDifference.save();
+
             //send New Mail with differences found.
             // let newMail = mail(difference, term);
             //Finally write over yesterday's file to compare for tomorrow
+
             fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
+            let filter = {query: term, type:"scratch"}
+            let update = {data: arrayToStore}
+            let replace = await Compare.findOneAndUpdate(filter, update, {new: true});
+
+
             //Finally Return Status
             return {
                 content: difference,
@@ -162,7 +176,7 @@ const processData = async (term, arrayToStore) => {
         return {
             content: arrayToStore,
             message: "There were no registries of the consultation",
-            info: "Writing new file to ' " +  path + "'"
+            info: "Writing new file to ' "+ "'"
         }
        
     }

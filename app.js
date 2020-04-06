@@ -268,7 +268,7 @@ app.get("/test", (req, res) => {
 
 
 let result2 = async (term) => {
-    let searchTerm = term || "thinkpad x220";
+    let searchTerm = term || "thinkpad w540";
     // first round of promise to get pages amount status: WORKING
     const pages = await getPages2(searchTerm);
     //second round of promises to get all results. status: WORKING
