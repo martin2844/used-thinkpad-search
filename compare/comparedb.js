@@ -63,20 +63,14 @@ let compare = async (term, pages) => {
 
 
 const processData = async (term, arrayToStore, mail) => {
-    // //Define path to save JSON Files
-    // let path = ('./compare/yesterday-' + term + '.json');
-    // let DATA;
-    // //returns true if file exists..
+ 
+
+
+    // FLATTEN ARRAY
     
-    // const checkFile = async () => {
-    //     try {
-    //         return await fs.existsSync(path);
-    //     } catch (error) {
-    //         return error;
-    //     }
-        
-        
-    // }
+        arrayToStore = _.flattenDeep(arrayToStore);
+        console.log(arrayToStore);
+  
 
     const checkDB = async () => {
         try {
@@ -120,26 +114,47 @@ const processData = async (term, arrayToStore, mail) => {
    
     if (await checkDB()) {
         let rawDataFromYesterday = await readDB();
-        let difference = _.differenceBy(arrayToStore[0], rawDataFromYesterday.data[0], 'id');
+        console.log(rawDataFromYesterday.data[0]);
+        let difference = _.differenceBy(arrayToStore, rawDataFromYesterday.data, 'id');
         console.log(difference, "is there a differences??");
         // difference variable return the new laptops, or the deleted ones. Differences...
-        // @@@ We are here now. If there are differences should try this out.
+  
         if (difference.length) {
+
+            const writeDifference = async () => {
+                try {
+                    const query = await Compare.findOne({query: term, type: {difference} }, (err, query) => {
+                        return query;
+                    });
+                    
+                    if(query){
+
+                        console.log("entered difference block")
+                        let filterDifference = {query: term, type:"difference"}
+                        let updateDifference = {data: arrayToStore}
+                        let replaceDifference = await Compare.findOneAndUpdate(filter, update, {new: true});
+
+                    } else {
+
+                        const newDifference = new Compare({
+                            query: term,
+                            type: "difference",
+                            data: difference
+                        });
+                        const newDif = await newDifference.save();
+                    }
+                    
+              
+                } catch (error) {
+                    return error;
+                }
+            }
             
-           
-            const newDifference = new Compare({
-                query: term,
-                type: "difference",
-                data: difference
-            });
-            
-            const newDif = await newDifference.save();
+            writeDifference();
 
             //send New Mail with differences found.
-            let newMail = mail(difference, term, mail);
+            //let newMail = mail(difference, term, mail);
             //Finally write over yesterday's file to compare for tomorrow
-
-            fs.writeFileSync('./compare/yesterday-' + term +'.json', JSON.stringify(arrayToStore));
             let filter = {query: term, type:"scratch"}
             let update = {data: arrayToStore}
             let replace = await Compare.findOneAndUpdate(filter, update, {new: true});

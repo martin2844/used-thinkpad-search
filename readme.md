@@ -24,4 +24,6 @@ React and Node full stack thinkpad searcher.
     - Added mongoDB implementation to be able to deploy to heroku, since heroku is ephimeral, saving to FS wont persist the data of saved queries. 
     - Refactored FS saving function, to a MongoDB saving Function.
     Should replace findoneandupdate since its deprecated.
+
+    0.2.1 - Flattened array's for DB saving, its much more clean, and better way of comparing.
     

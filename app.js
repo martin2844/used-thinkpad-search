@@ -253,7 +253,7 @@ app.post("/api/comparetofs/:term", (req, res) => {
 });
 
 
-app.post("/api/comparetodb/:term", (req, res) => {
+app.get("/api/comparetodb/:term", (req, res) => {
     const {term} = req.params
     saveQueryToDB(term).then(x => {
         res.send(x);
